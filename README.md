@@ -16,43 +16,63 @@ Here's what a config for youtube-dl might look like:
 meta:
   title: 'Download videos from YouTube (and more sites)'
   command: 'youtube-dl'
-  flagSyntax: ' --%FLAG%=%VALUE%'
+  formats:
+    nothing: ''
+    argument: ' %value%'
+    booleanFlag: ' --%flag%'
+    textFlag:' --%flag%=%text%'
 args:
   url:
     label: 'Video URL'
     widget: 'textbox'
-    position: 10
+    position: 20
     category: '__TOP__'
     output:
-      filled: '%VALUE%'
+      style: 'argument'
+      value: '%VALUE%'
     required: true
   format:
     label: 'Video format code'
     widget: 'textbox'
-    position: 20
+    position: 10
     category: 'videoformat'
-    flag: 'format'
-    required: false
+    output:
+      style: 'textFlag'
+      flag: 'format'
+      text: '%VALUE%'
   all-formats:
     label: 'Download all formats'
     widget: 'checkbox'
-    position: 20
+    position: 10
     category: 'videoformat'
-    flag: 'all-formats'
-    required: false
+    ifChecked:
+      output:
+        style: 'booleanFlag'
+        flag: 'all-formats'
+    ifUnchecked:
+      output:
+        style: 'nothing'
   prefer-free-formats:
     label: 'Prefer free formats'
     widget: 'checkbox'
-    position: 20
+    position: 10
     category: 'videoformat'
-    flag: 'prefer-free-formats'
-    required: false
+    ifChecked:
+      output:
+        style: 'booleanFlag'
+        flag: 'all-formats'
+    ifUnchecked:
+      output:
+        style: 'nothing'
   merge-output-format:
     label: 'Output format if a merge is required'
     widget: 'dropdown'
-    position: 20
+    position: 10
     category: 'videoformat'
-    flag: 'merge-output-format'
+    output:
+      style: 'textFlag'
+      flag: 'merge-output-format'
+      text: '%VALUE%'
     required: false
     widgetOptions:
       listSource: 'values'
@@ -67,4 +87,4 @@ categories:
     label: 'Video Format Options'
 ```
 
-**position**: Every option/arg can have a position. This should be an integer. The higher the integer, the more left the option appears in the output
+**position**: Every arg can have a position. This should be an integer. The higher the integer, the farther right the arg appears in the command's entire output. Any args that can be positioned interchangeably can and should have the same position value.
